@@ -17,7 +17,7 @@ export class UsersService {
   async createUser(dto: CreateUserDto) {
     // обращение к бд - асинхронная функция, обращаемся к репозиторию и вызываем функию создания, внутрь передаем dto юзера
     const user = await this.userRepository.create(dto);
-    const role = await this.roleService.getRoleByValue("ADMIN"); //роль по умолчанию
+    const role = await this.roleService.getRoleByValue("USER"); //роль по умолчанию
     if (role) {
       await user.$set("roles", [role.id]);
       user.roles = [role];
@@ -32,6 +32,14 @@ export class UsersService {
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email },
+      include: { all: true }, //чтобы подтягивались все поля, включая роли
+    });
+    return user;
+  }
+
+  async getUserByUsername(username: string) {
+    const user = await this.userRepository.findOne({
+      where: { username },
       include: { all: true }, //чтобы подтягивались все поля, включая роли
     });
     return user;

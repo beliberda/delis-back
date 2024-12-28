@@ -8,6 +8,9 @@ export class CreateUserDto {
     description: "Уникальный email",
   })
   @IsString({ message: "Должно быть строкой" })
+  readonly username: string;
+
+  @IsString({ message: "Должно быть строкой" })
   @IsEmail({}, { message: "Введите email" })
   readonly email: string;
 

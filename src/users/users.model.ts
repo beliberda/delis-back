@@ -42,6 +42,24 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   email: string;
 
+  @ApiProperty({ example: "jhon_doe", description: "логин пользователя" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  username: string;
+  @ApiProperty({ example: "Иван", description: "Имя пользователя" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  first_name: string;
+  @ApiProperty({ example: "Иванов", description: "Фамилия пользователя" })
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  last_name: string;
   @ApiProperty({ example: "1234", description: "пароль пользователя" })
   @Column({
     type: DataType.STRING,

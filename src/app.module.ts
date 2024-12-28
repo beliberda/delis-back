@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, RequestMethod } from "@nestjs/common";
 
 import { UsersModule } from "./users/users.module";
 import { SequelizeModule } from "@nestjs/sequelize";
@@ -13,18 +13,27 @@ import { PostsModule } from "./posts/posts.module";
 import { Post } from "src/posts/posts.model";
 import { FilesModule } from "./files/files.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { VideosModule } from "./videos/videos.module";
+import { CommentsModule } from "./comments/comments.module";
 import * as path from "path";
+import { MulterModule } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { LoggerMiddleware } from "src/middlewares/LoggerMiddleware";
 
 @Module({
   controllers: [],
   providers: [],
   //   Когда хотим в один модуль импортировать другие модули (например для работы с бд sequalize)
   imports: [
+    MulterModule.register({
+      dest: "../uploads", // Временная папка для хранения файлов
+    }),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, "static"),
+      rootPath: path.resolve(__dirname, "..", "uploads"), // Указываем путь к папке uploads
+      serveRoot: "/uploads", // Базовый URL для доступа к файлам
     }),
     SequelizeModule.forRoot({
       dialect: "postgres",
@@ -43,6 +52,14 @@ import * as path from "path";
     AuthModule,
     PostsModule,
     FilesModule,
+    VideosModule,
+    CommentsModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: "/videos/:id", method: RequestMethod.ALL });
+  }
+}

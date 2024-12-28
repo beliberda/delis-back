@@ -18,7 +18,12 @@ async function start() {
   // подключаем swagger к приложению и указываем путь к документации
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("/api/docs", app, document);
-
+  app.enableCors({
+    origin: ["http://localhost:5173"], // Разрешённые источники
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Разрешённые методы
+    allowedHeaders: "Content-Type, Authorization", // Разрешённые заголовки
+    // credentials: true, // Если используется куки
+  });
   await app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 }
 start();
