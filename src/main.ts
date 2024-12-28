@@ -7,9 +7,9 @@ async function start() {
   const app = await NestFactory.create(AppModule);
 
   // настройка swaggera
-
+  app.setGlobalPrefix("api");
   const config = new DocumentBuilder()
-    .setTitle("Продвинутый Backend")
+    .setTitle("Delis Media Backend")
     .setDescription("Документация REST API")
     .setVersion("1.0.0")
     .addTag("auth")
@@ -19,7 +19,7 @@ async function start() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("/api/docs", app, document);
   app.enableCors({
-    origin: ["http://localhost:5173"], // Разрешённые источники
+    origin: ["http://localhost:5173", "http://delis.media/"], // Разрешённые источники
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Разрешённые методы
     allowedHeaders: "Content-Type, Authorization", // Разрешённые заголовки
     // credentials: true, // Если используется куки
