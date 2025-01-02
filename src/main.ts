@@ -19,10 +19,10 @@ async function start() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("/api/docs", app, document);
   app.enableCors({
-    origin: ["http://localhost:5173", "http://delis.media/"], // Разрешённые источники
+    origin: ["http://localhost:5173", "http://delis.media"], // Разрешённые источники
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Разрешённые методы
     allowedHeaders: "Content-Type, Authorization", // Разрешённые заголовки
-    // credentials: true, // Если используется куки
+    credentials: true, // Если используется куки
   });
   await app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 }

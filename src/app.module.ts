@@ -27,6 +27,9 @@ import { LoggerMiddleware } from "src/middlewares/LoggerMiddleware";
   imports: [
     MulterModule.register({
       dest: "../uploads", // Временная папка для хранения файлов
+      limits: {
+        fileSize: 100 * 1024 * 1024, // Лимит размера файла 100MB
+      },
     }),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
